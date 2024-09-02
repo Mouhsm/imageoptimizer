@@ -3,6 +3,12 @@ from PIL import Image
 import io
 import tempfile
 import os
+from flask import Flask, send_file, request
+from flask_cors import CORS
+
+# Initialize Flask app
+app = Flask(__name__)
+CORS(app)  # Enable CORS for all domains
 
 def optimize_image_file(image_file, format_choice):
     # Open the image using Pillow
@@ -73,3 +79,7 @@ if uploaded_file and format_choice:
             
             # Clean up the temporary file
             os.remove(optimized_image_path)
+
+# Run the Flask app if needed
+if __name__ == "__main__":
+    app.run(port=8000, debug=True)

@@ -1,2 +1,4 @@
 streamlit
-pillow
+Pillow
+Flask
+flask-cors

@@ -25,20 +25,6 @@ def optimize_image_file(image_file, format_choice):
     # Return the file path and original file name
     return temp_file_path, f"{original_file_name}.{format_choice.lower()}"
 
-def resize_image(image_path, max_width=800):
-    # Open the image and resize it to the specified width
-    image = Image.open(image_path)
-    width_percent = (max_width / float(image.size[0]))
-    height_size = int((float(image.size[1]) * float(width_percent)))
-    image = image.resize((max_width, height_size), Image.LANCZOS)
-    
-    # Save resized image to a temporary file
-    with tempfile.NamedTemporaryFile(delete=False, suffix='.jpg', mode='wb') as resized_file:
-        resized_path = resized_file.name
-        image.save(resized_path, 'JPEG')
-    
-    return resized_path
-
 # Streamlit app
 st.set_page_config(page_title="Image Optimizer", layout="centered")
 
@@ -77,10 +63,9 @@ if uploaded_file and format_choice:
             # Optimize image
             optimized_image_path, optimized_file_name = optimize_image_file(uploaded_file, format_choice)
             
-            # Resize the optimized image for display
-            resized_image_path = resize_image(optimized_image_path)
-            with open(resized_image_path, "rb") as resized_file:
-                st.image(resized_file.read(), caption='Optimized Image Preview', use_column_width=True)
+            # Load the optimized image
+            with open(optimized_image_path, "rb") as file:
+                st.image(file.read(), caption='Optimized Image', use_column_width=True)
             
             # Provide a download link
             with open(optimized_image_path, "rb") as file:
@@ -91,6 +76,5 @@ if uploaded_file and format_choice:
                     mime=f"image/{format_choice.lower()}"
                 )
             
-            # Clean up the temporary files
+            # Clean up the temporary file
             os.remove(optimized_image_path)
-            os.remove(resized_image_path)

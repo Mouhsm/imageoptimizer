@@ -34,6 +34,19 @@ st.markdown("""
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
+    
+    /* Style for the Optimize button */
+    .stButton>button {
+        background-color: #007bff; /* Bootstrap blue */
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .stButton>button:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+    }
     </style>
     """, unsafe_allow_html=True)
 

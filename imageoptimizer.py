@@ -30,7 +30,7 @@ def resize_image(image_path, max_width=800):
     image = Image.open(image_path)
     width_percent = (max_width / float(image.size[0]))
     height_size = int((float(image.size[1]) * float(width_percent)))
-    image = image.resize((max_width, height_size), Image.ANTIALIAS)
+    image = image.resize((max_width, height_size), Image.LANCZOS)
     
     # Save resized image to a temporary file
     with tempfile.NamedTemporaryFile(delete=False, suffix='.jpg', mode='wb') as resized_file:

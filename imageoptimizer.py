@@ -28,22 +28,12 @@ def optimize_image_file(image_file, format_choice):
 # Streamlit app
 st.set_page_config(page_title="Image Optimizer", layout="centered")
 
-# Inject custom CSS to style buttons, hide menu, and footer
+# Inject custom CSS to hide Streamlit footer, menu, and header
 st.markdown("""
     <style>
-    .stButton button {
-        background-color: #007BFF; /* Blue color */
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 10px 20px;
-        cursor: pointer;
-    }
-    .stButton button:hover {
-        background-color: #0056b3; /* Darker blue */
-    }
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
+    header {visibility: hidden;}
     </style>
     """, unsafe_allow_html=True)
 

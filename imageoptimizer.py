@@ -28,7 +28,7 @@ def optimize_image_file(image_file, format_choice):
 # Streamlit app
 st.set_page_config(page_title="Image Optimizer", layout="centered")
 
-# Inject custom CSS to hide Streamlit footer, menu, and header
+# Inject custom CSS to hide Streamlit footer, menu, and header and center the download button
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
@@ -46,6 +46,24 @@ st.markdown("""
     }
     .stButton>button:hover {
         background-color: #0056b3; /* Darker blue on hover */
+    }
+
+    /* Center the download button with reduced space */
+    .stDownloadButton {
+        display: flex;
+        justify-content: center;
+        margin-top: 5px; /* Reduced space */
+    }
+    .stDownloadButton>button {
+        background-color: #c8553d; /* Updated color */
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .stDownloadButton>button:hover {
+        background-color: #a73e2d; /* Slightly darker on hover */
     }
     </style>
     """, unsafe_allow_html=True)
@@ -65,16 +83,20 @@ if uploaded_file and format_choice:
             
             # Load the optimized image
             with open(optimized_image_path, "rb") as file:
-                st.image(file.read(), caption='Optimized Image', use_column_width=True)
+                img_data = file.read()
             
-            # Provide a download link
-            with open(optimized_image_path, "rb") as file:
-                st.download_button(
-                    label="Download Optimized Image",
-                    data=file,
-                    file_name=optimized_file_name,
-                    mime=f"image/{format_choice.lower()}"
-                )
+            # Display the download button centered with reduced space
+            st.markdown('<div class="stDownloadButton">', unsafe_allow_html=True)
+            st.download_button(
+                label="Download Optimized Image",
+                data=img_data,
+                file_name=optimized_file_name,
+                mime=f"image/{format_choice.lower()}"
+            )
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+            # Display the optimized image
+            st.image(img_data, caption='Optimized Image', use_column_width=True)
             
             # Clean up the temporary file
             os.remove(optimized_image_path)

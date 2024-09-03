@@ -25,6 +25,16 @@ def optimize_image_file(image_file, format_choice):
     # Return the file path and original file name
     return temp_file_path, f"{original_file_name}.{format_choice.lower()}"
 
+def create_thumbnail(image_path, size=(800, 800)):
+    # Open the image and create a thumbnail
+    image = Image.open(image_path)
+    image.thumbnail(size)
+    # Save thumbnail to a temporary file
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.jpg', mode='wb') as thumb_file:
+        thumb_path = thumb_file.name
+        image.save(thumb_path, 'JPEG')
+    return thumb_path
+
 # Streamlit app
 st.set_page_config(page_title="Image Optimizer", layout="centered")
 
@@ -63,9 +73,10 @@ if uploaded_file and format_choice:
             # Optimize image
             optimized_image_path, optimized_file_name = optimize_image_file(uploaded_file, format_choice)
             
-            # Load the optimized image
-            with open(optimized_image_path, "rb") as file:
-                st.image(file.read(), caption='Optimized Image', use_column_width=True)
+            # Create and display thumbnail of the optimized image
+            thumbnail_path = create_thumbnail(optimized_image_path)
+            with open(thumbnail_path, "rb") as thumb_file:
+                st.image(thumb_file.read(), caption='Optimized Image Preview', use_column_width=True)
             
             # Provide a download link
             with open(optimized_image_path, "rb") as file:
@@ -76,5 +87,6 @@ if uploaded_file and format_choice:
                     mime=f"image/{format_choice.lower()}"
                 )
             
-            # Clean up the temporary file
+            # Clean up the temporary files
             os.remove(optimized_image_path)
+            os.remove(thumbnail_path)
